@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>¿Te puedo invitar a salir?</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="card">
+    <h1>¿Te puedo invitar a salir?</h1>
+    <div class="buttons">
+      <button onclick="responder('Sí')">Sí 💖</button>
+      <button onclick="responder('No')">No 😢</button>
+    </div>
+    <p id="mensaje"></p>
+  </div>
+
+  <script>
+    async function responder(opcion) {
+      try {
+        const response = await fetch('/enviar-respuesta', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ respuesta: opcion })
+        });
+
+        const mensaje = document.getElementById('mensaje');
+        if (response.ok) {
+          mensaje.innerText = '¡Respuesta enviada!';
+        } else {
+          mensaje.innerText = 'Error al enviar 😢';
+        }
+      } catch (error) {
+        console.error(error);
+        document.getElementById('mensaje').innerText = 'Error de conexión';
+      }
+    }
+  </script>
+</body>
+</html>
+
